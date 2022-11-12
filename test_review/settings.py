@@ -20,10 +20,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6)4as^*^uu=^4n!^hlg=jblm0w22fblm4@$k*k!7gvw&y-8_c4'
+# SECRET_KEY = 'django-insecure-6)4as^*^uu=^4n!^hlg=jblm0w22fblm4@$k*k!7gvw&y-8_c4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -83,12 +83,12 @@ WSGI_APPLICATION = 'test_review.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
 # Password validation
@@ -133,3 +133,49 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+#### 도텐브 설정 from google
+# from environ import Env
+
+# env = Env() 
+# env_path = BASE_DIR / ".env" 
+# if env_path.exists():
+# 	with env_path.open("rt", encoding="utf8") as f:
+# 		env.read_env(f, overwrite=True)
+#
+# SECRET_KEY = env('SECRET_KEY')
+# DEBUG = env('DEBUG')
+# DATABASES = {
+#     'default': env.db(),
+
+#     'extra': env.db_url(
+#         'SQLITE_URL',
+#         default='sqlite:////tmp/my-tmp-sqlite.db'
+#     )
+# }
+
+# #### 공식문서
+import environ
+import os
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+
+# Set the project base directory
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# Take environment variables from .env file
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+DEBUG = env('DEBUG')
+SECRET_KEY = env('SECRET_KEY')
+DATABASES = {
+    'default': env.db(),
+
+    'extra': env.db_url(
+        'SQLITE_URL',
+        default='sqlite:////tmp/my-tmp-sqlite.db'
+    )
+}
